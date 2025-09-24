@@ -2,7 +2,8 @@ import express from "express";
 const app = express()
 app.set('query parser', 'extended');
 import dotenv from "dotenv";
-import productRotues from "./rotues/productRouter.js"
+import productRoutes from "./rotues/productRouter.js";
+import authRoutes from "./rotues/userRoutes.js";
 import { dbConnection } from "./config/dbConnect.js";
 import errorMiddleware from "./middlewares/error.js";
 
@@ -23,7 +24,10 @@ dbConnection();
 app.use(express.json())
 
 //Import all routes
-app.use("/api/v1", productRotues);
+app.use("/api/v1", productRoutes);
+app.use("/api/v1", authRoutes);
+
+
 
 
 //Using error Middlewares
