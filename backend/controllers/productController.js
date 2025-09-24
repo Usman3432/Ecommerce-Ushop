@@ -6,12 +6,15 @@ import ErrorHadler from "../utils/error_handler.js";
 
 // Get all Products      =>   /api/v1/products
 export const getProducts = catchAsyncErrors( async(req, res, next) =>{
-
-
+    const resPerPage = 4;
     const apiFilters = new APIFILTERS(Product, req.query).search().filters();
 
     let product = await apiFilters.query;
+
     let filterProdCount = product.length;
+    apiFilters.pagination(resPerPage);
+    product = await apiFilters.query.clone();
+
     if( !product ) {
         return next(new ErrorHadler("Product not found!", 404))
     }

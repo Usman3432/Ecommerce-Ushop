@@ -1,3 +1,5 @@
+import { response } from "express";
+
 class APIFILTERS {
     constructor(query, queryStr){
         this.query = query;
@@ -22,7 +24,7 @@ class APIFILTERS {
         const queryCopy = { ...this.queryStr };
 
         //Fields to Remove
-        const fieldToRemove = ["keyword"];
+        const fieldToRemove = ["keyword", "page"];
         fieldToRemove.forEach((el) => delete queryCopy[el]);
 
 
@@ -42,6 +44,14 @@ class APIFILTERS {
         return this
 
         
+    }
+
+    pagination(resPerPage){
+        const currentPage = Number(this.queryStr.page) || 1;
+        const skip = resPerPage * (currentPage - 1);
+        
+        this.query = this.query.limit(resPerPage).skip(skip);
+        return this
     }
 
 }
