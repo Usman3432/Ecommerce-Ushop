@@ -15,6 +15,25 @@ export default (err, req, res, next) =>{
         const message = Object.values(err.errors).map((value) => value.message)
         error = new ErrorHandler(message, 400);
     }
+    //Handle  Mongoose duplicate email Error
+    if(err.code === 11000){
+        const message = `Duplicate: ${Object.keys(err.keyValue)} entered`
+        error = new ErrorHandler(message, 404);
+    };
+
+    //Handle wrong JWT Error
+    if(err?.name === 'JsonWebTokenError'){
+        const message = `JSON  web token is invalid: ${err?.path}`
+        error = new ErrorHandler(message, 404);
+    };
+
+
+     //Handle expired JWT Error
+    if(err?.name === 'TokenExpiredError'){
+        const message = `JSON  web token is expired. Try Again!!!: ${err?.path}`
+        error = new ErrorHandler(message, 404);
+    };
+
 
     if(process.env.NODE_ENV === "DEVELOPMENT") {
         res.status(error.statusCode).json({
