@@ -3,6 +3,7 @@ const app = express()
 app.set('query parser', 'extended');
 import dotenv from "dotenv";
 import productRoutes from "./rotues/productRouter.js";
+import cookieParser from "cookie-parser";
 import authRoutes from "./rotues/userRoutes.js";
 import { dbConnection } from "./config/dbConnect.js";
 import errorMiddleware from "./middlewares/error.js";
@@ -22,6 +23,7 @@ dotenv.config({path: "backend/config/config.env"});
 //Database connection
 dbConnection();
 app.use(express.json())
+app.use(cookieParser());
 
 //Import all routes
 app.use("/api/v1", productRoutes);
