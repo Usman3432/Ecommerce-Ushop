@@ -1,5 +1,6 @@
 import express from "express";
 import {
+    deleteUser,
   forgotPassword,
   getAllUsers,
   getUserDetails,
@@ -10,6 +11,7 @@ import {
   resetPassword,
   updatePassword,
   updateProfile,
+  updateUser,
 } from "../controllers/authControllers.js";
 import { authorizeRoles, isAuthenticated } from "../middlewares/auth.js";
 
@@ -28,6 +30,8 @@ router.route("/profile/update").put(isAuthenticated, updateProfile);
 router.route("/admin/users").get(isAuthenticated, authorizeRoles('admin'), getAllUsers);
 router
   .route("/admin/user/:id")
-  .get(isAuthenticated, authorizeRoles('admin'), getUserDetails);
+  .get(isAuthenticated, authorizeRoles('admin'), getUserDetails)
+  .put(isAuthenticated, authorizeRoles('admin'), updateUser)
+  .delete(isAuthenticated, authorizeRoles('admin'), deleteUser);
 
 export default router;
