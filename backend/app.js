@@ -5,8 +5,10 @@ import dotenv from "dotenv";
 import productRoutes from "./rotues/productRouter.js";
 import cookieParser from "cookie-parser";
 import authRoutes from "./rotues/userRoutes.js";
+import orderRoutes from "./rotues/orderRoutes.js"
 import { dbConnection } from "./config/dbConnect.js";
 import errorMiddleware from "./middlewares/error.js";
+
 
 //Handle uncaught exceptions
 process.on("uncaughtException", (err) => {
@@ -25,6 +27,7 @@ app.use(cookieParser());
 //Import all routes
 app.use("/api/v1", productRoutes);
 app.use("/api/v1", authRoutes);
+app.use("/api/v1", orderRoutes);
 
 //Using error Middlewares
 app.use(errorMiddleware);

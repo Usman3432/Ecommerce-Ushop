@@ -66,7 +66,7 @@ const order = new mongoose.Schema(
       id: String,
       status: String,
     },
-    itmesPrice: {
+    itemPrice: {
       type: Number,
       required: true,
     },
