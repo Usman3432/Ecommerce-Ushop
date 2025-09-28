@@ -10,7 +10,7 @@ const Header = () => {
           </a>
         </div>
       </div>
-      <div className="col-12 col-md-6 mt-2 mt-md-0">
+      <div className="col-12 col-md-5 mt-2 mt-md-0">
         <form action="your_search_action_url_here" method="get">
           <div className="input-group">
             <input
