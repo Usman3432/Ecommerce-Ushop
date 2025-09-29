@@ -2,9 +2,12 @@ import React from "react";
 import MetaData from "./layouts/MetaData";
 import { useGetProductsQuery } from "../redux/api/productsApi";
 import ProductItem from "./product/ProductItem";
+import Loader from "./layouts/Loader";
 
 const Home = () => {
   const { data, isLoading } = useGetProductsQuery()
+
+  if(isLoading) return <Loader />
 
   return (
     <>
@@ -17,9 +20,7 @@ const Home = () => {
 
           <section id="products" className="mt-5">
             <div className="row">
-              {isLoading ? (
-                <p>Loading products...</p>
-              ) : data?.product?.length > 0 ? (
+              {data?.product?.length > 0 ? (
                 data.product.map((product) => (
                   <ProductItem key={product._id} product={product} />
                 ))
