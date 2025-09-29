@@ -6,11 +6,13 @@ export const productApi = createApi({
     endpoints: (builder) => ({
         getProducts: builder.query({
             query: (params) => '/products',
-            
+        }),
+        getProductDetails: builder.query({
+            query: (id) => `/products/${id}`,
         })
     })
 })
 
 
 //Its a hook that can be used in components to load all variables(isloading var, success var, error var etc)
-export const { useGetProductsQuery } = productApi      
+export const { useGetProductsQuery, useGetProductDetailsQuery } = productApi      
