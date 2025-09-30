@@ -16,7 +16,9 @@ const ProductDetails = () => {
 
   useEffect(() => {
     setActiveImg(
-      product?.images[0]
+      product?.images[0] &&
+        product?.images[0]?.url &&
+        !product?.images[0]?.url.includes("example.com")
         ? product?.images[0]?.url
         : "/images/default_product.png"
     );
@@ -47,12 +49,14 @@ const ProductDetails = () => {
             <div className="col-2 ms-4 mt-2">
               <a role="button">
                 <img
-                  className={`d-block border rounded p-3 cursor-pointer ${img.url === activeImg ? "border-warning": ""}`}
+                  className={`d-block border rounded p-3 cursor-pointer ${
+                    img.url === activeImg ? "border-warning" : ""
+                  }`}
                   height="100"
                   width="100"
                   src={img?.url}
                   alt={img?.url}
-                  onClick={(e)=> setActiveImg(img?.url)}
+                  onClick={(e) => setActiveImg(img?.url)}
                 />
               </a>
             </div>;

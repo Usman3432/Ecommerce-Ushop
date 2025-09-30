@@ -7,7 +7,11 @@ const ProductItem = ({ product }) => {
       <div className="card p-3 rounded">
         <img
           className="card-img-top mx-auto"
-          src={product?.images[0]?.url}
+          src={
+            product?.images[0] && product?.images[0]?.url && !product?.images[0]?.url.includes('example.com')
+              ? product?.images[0]?.url
+              : "/images/default_product.png"
+          }
           alt={product?.name}
         />
         <div className="card-body ps-3 d-flex justify-content-center flex-column">
@@ -20,8 +24,9 @@ const ProductItem = ({ product }) => {
                 <span
                   key={index}
                   style={{
-                    color: index < (product?.ratings || 0) ? '#ffc107' : '#e0e0e0',
-                    fontSize: '16px'
+                    color:
+                      index < (product?.ratings || 0) ? "#ffc107" : "#e0e0e0",
+                    fontSize: "16px",
                   }}
                 >
                   ★

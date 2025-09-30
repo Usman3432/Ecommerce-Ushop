@@ -19,6 +19,7 @@ export const getProducts = catchAsyncErrors(async (req, res, next) => {
   }
   res.status(200).json({
     message: "All Products",
+    resPerPage,
     filterProdCount,
     product,
   });
