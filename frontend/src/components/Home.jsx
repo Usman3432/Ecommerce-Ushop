@@ -14,10 +14,13 @@ const Home = () => {
   const keyword = searchParams.get("keyword") || "";
   const min = searchParams.get("min") || "";
   const max = searchParams.get("max") || "";
+  const category = searchParams.get("category");
+
   const params = { page, keyword };
 
   if (min) params.min = min;
   if (max) params.max = max;
+  if (category) params.category = category;
 
   const { data, isLoading, error, isError } = useGetProductsQuery(params);
 
