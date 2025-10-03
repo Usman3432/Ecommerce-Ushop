@@ -11,10 +11,10 @@ const Filters = () => {
 
   let [searchParams] = useSearchParams();
 
-  useEffect(() =>{
-    searchParams.has("min") && setMin(searchParams.get('min'))
-    searchParams.has("max") && setMax(searchParams.get('max'))
-  }, [])
+  useEffect(() => {
+    searchParams.has("min") && setMin(searchParams.get("min"));
+    searchParams.has("max") && setMax(searchParams.get("max"));
+  }, []);
 
   //Handle price filters
 
@@ -57,7 +57,7 @@ const Filters = () => {
 
   const defaultCheckHandler = (checkboxType, checkboxValue) => {
     const value = searchParams.get(checkboxType);
-    if(checkboxValue === value) return true;
+    if (checkboxValue === value) return true;
     return false;
   };
 
@@ -117,30 +117,25 @@ const Filters = () => {
       <hr />
       <h5 className="mb-3">Ratings</h5>
 
-      <div className="form-check">
-        <input
-          className="form-check-input"
-          type="checkbox"
-          name="ratings"
-          id="check7"
-          value="5"
-        />
-        <label className="form-check-label" for="check7">
-          <span className="star-rating">★ ★ ★ ★ ★</span>
-        </label>
-      </div>
-      <div className="form-check">
-        <input
-          className="form-check-input"
-          type="checkbox"
-          name="ratings"
-          id="check8"
-          value="4"
-        />
-        <label className="form-check-label" for="check8">
-          <span className="star-rating">★ ★ ★ ★ ☆</span>
-        </label>
-      </div>
+      {[5, 4, 3, 2, 1].map((rating) => (
+        <div className="form-check" key={rating}>
+          <input
+            className="form-check-input"
+            type="checkbox"
+            name="ratings"
+            id={`rating-${rating}`}
+            value={rating}
+            defaultChecked={defaultCheckHandler("ratings", rating?.toString())}
+            onClick={(e) => handleClick(e.target)}
+          />
+          <label className="form-check-label" htmlFor={`rating-${rating}`}>
+            <span className="star-rating">
+              <span style={{color: '#ffc107'}}>{"★".repeat(rating)}</span>
+              <span style={{color: '#e0e0e0'}}>{"☆".repeat(5 - rating)}</span>
+            </span>
+          </label>
+        </div>
+      ))}
     </div>
   );
 };
