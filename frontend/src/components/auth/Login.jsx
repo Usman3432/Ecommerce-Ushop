@@ -9,12 +9,6 @@ const Login = () => {
 
     const [login , {isLoading, error, data}] =  useLoginMutation();
 
-    console.log('====================================');
-    console.log(data)
-    console.log('====================================');
-    
-
-
 
     useEffect(() =>{
         if(error){
