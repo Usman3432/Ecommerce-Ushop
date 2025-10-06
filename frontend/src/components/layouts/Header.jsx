@@ -6,11 +6,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../../redux/api/authApi";
 
 const Header = () => {
+  const navigate = useNavigate();
 
-  const navigate = useNavigate()
-
-  const {isLoading} = useGetMeQuery();
-  const { user }  = useSelector((state) => state.auth)
+  const { isLoading } = useGetMeQuery();
+  const { user } = useSelector((state) => state.auth);
   const [logout] = useLogoutMutation();
 
   const logoutHandler = async () => {
@@ -20,7 +19,7 @@ const Header = () => {
     } catch (error) {
       console.error("Logout failed:", error);
     }
-  }
+  };
   return (
     <nav className="navbar row">
       <div className="col-12 col-md-3 ps-5">
@@ -45,53 +44,60 @@ const Header = () => {
         </a>
         {user ? (
           <div className="ms-4 dropdown">
-          <button
-            className="btn dropdown-toggle text-white"
-            type="button"
-            id="dropDownMenuButton"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <figure className="avatar avatar-nav">
-              <img
-                src={user?.avatar ? user?.avatar?.url : "/images/default_avatar.jpg"}
-                alt="User Avatar"
-                className="rounded-circle"
-              />
-            </figure>
-            <span>{user?.name}</span>
-          </button>
-          <div
-            className="dropdown-menu w-100"
-            aria-labelledby="dropDownMenuButton"
-          >
-            <Link className="dropdown-item" to="/admin/dashboard">
-              {" "}
-              Dashboard{" "}
-            </Link>
+            <button
+              className="btn dropdown-toggle text-white"
+              type="button"
+              id="dropDownMenuButton"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <figure className="avatar avatar-nav">
+                <img
+                  src={
+                    user?.avatar
+                      ? user?.avatar?.url
+                      : "/images/default_avatar.jpg"
+                  }
+                  alt="User Avatar"
+                  className="rounded-circle"
+                />
+              </figure>
+              <span>{user?.name}</span>
+            </button>
+            <div
+              className="dropdown-menu w-100"
+              aria-labelledby="dropDownMenuButton"
+            >
+              <Link className="dropdown-item" to="/admin/dashboard">
+                {" "}
+                Dashboard{" "}
+              </Link>
 
-            <Link className="dropdown-item" to="/me/orders">
-              {" "}
-              Orders{" "}
-            </Link>
+              <Link className="dropdown-item" to="/me/orders">
+                {" "}
+                Orders{" "}
+              </Link>
 
-            <Link className="dropdown-item" to="/me/profile">
-              {" "}
-              Profile{" "}
-            </Link>
+              <Link className="dropdown-item" to="/me/profile">
+                {" "}
+                Profile{" "}
+              </Link>
 
-            <Link className="dropdown-item text-danger" to="/" onClick={logoutHandler}>
-              
-              Logout{" "}
-            </Link>
+              <Link
+                className="dropdown-item text-danger"
+                to="/"
+                onClick={logoutHandler}
+              >
+                Logout{" "}
+              </Link>
+            </div>
           </div>
-        </div>
-        ): (
+        ) : (
           !isLoading && (
             <Link to="/login" className="btn ms-4" id="login_btn">
-          {" "}
-          Login{" "}
-        </Link>
+              {" "}
+              Login{" "}
+            </Link>
           )
         )}
       </div>
