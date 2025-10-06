@@ -2,12 +2,25 @@ import React from "react";
 import Search from "./Search";
 import { useGetMeQuery } from "../../redux/api/userApi";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useLogoutMutation } from "../../redux/api/authApi";
 
 const Header = () => {
 
+  const navigate = useNavigate()
+
   const {isLoading} = useGetMeQuery();
   const { user }  = useSelector((state) => state.auth)
+  const [logout] = useLogoutMutation();
+
+  const logoutHandler = async () => {
+    try {
+      await logout().unwrap();
+      navigate(0); // refresh the page
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  }
   return (
     <nav className="navbar row">
       <div className="col-12 col-md-3 ps-5">
@@ -67,8 +80,8 @@ const Header = () => {
               Profile{" "}
             </Link>
 
-            <Link className="dropdown-item text-danger" to="/">
-              {" "}
+            <Link className="dropdown-item text-danger" to="/" onClick={logoutHandler}>
+              
               Logout{" "}
             </Link>
           </div>

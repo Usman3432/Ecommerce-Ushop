@@ -41,8 +41,24 @@ export const authApi = createApi({
         }
       },
     }),
+    logout: builder.mutation({
+      query: () => ({
+        url: "/logout",
+        method: "GET"
+      }),
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          // Clear user state after logout
+          dispatch({ type: 'userSlice/setUser', payload: null });
+          dispatch({ type: 'userSlice/setIsAuthenticated', payload: false });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    })
   }),
 });
 
 //Its a hook that can be used in components to load all variables(isloading var, success var, error var etc)
-export const { useLoginMutation, useRegisterMutation } = authApi;
+export const { useLoginMutation, useRegisterMutation, useLogoutMutation } = authApi;
