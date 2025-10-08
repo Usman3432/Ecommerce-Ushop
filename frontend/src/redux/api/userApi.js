@@ -31,9 +31,19 @@ export const userApi = createApi({
         }
       },
       invalidatesTags: ["User"],
+    }),
+    uploadAvatar: builder.mutation({
+      query(body) {
+        return {
+          url: "/me/upload_avatar",
+          method: "PUT",
+          body
+        }
+      },
+      invalidatesTags: ["User"],
     })
   }),
 });
 
 //Its a hook that can be used in components to load all variables(isloading var, success var, error var etc)
-export const { useGetMeQuery, useUpdateProfileMutation } = userApi;
+export const { useGetMeQuery, useUpdateProfileMutation, useUploadAvatarMutation } = userApi;

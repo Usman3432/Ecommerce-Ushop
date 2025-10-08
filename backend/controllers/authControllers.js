@@ -1,5 +1,6 @@
 import catchAsyncErrors from "../middlewares/catchAsyncErrors.js";
 import User from "../models/userModel.js";
+import { upload_file } from "../utils/cloudinary.js";
 import { getResetPasswordTemp } from "../utils/emailTemplate.js";
 import ErrorHandler from "../utils/error_handler.js";
 import sendEmail from "../utils/sendEmail.js";
@@ -47,6 +48,17 @@ export const logoutUser = catchAsyncErrors(async (req, res, next) => {
   });
   res.status(200).json({
     message: "Logged out successfully",
+  });
+});
+
+//Upload user Avater     => /api/v1/me/updload_avatar
+export const uploadAvatar = catchAsyncErrors(async (req, res, next) => {
+  const avatarResponse = await upload_file(req?.body?.avatar, "Ushop/avatars");
+  const user = await User.findByIdAndUpdate(req?.user?._id, {
+    avatar: avatarResponse,
+  });
+  res.status(200).json({
+    user,
   });
 });
 
@@ -181,14 +193,12 @@ export const getUserDetails = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-
-
 //Update user details -- ADMIN  => /api/v1/admin/user/:id
 export const updateUser = catchAsyncErrors(async (req, res, next) => {
   const newData = {
     name: req.body.name,
     email: req.body.email,
-    role: req.body.role
+    role: req.body.role,
   };
   const user = await User.findByIdAndUpdate(req.params.id, newData, {
     new: true,
@@ -198,7 +208,6 @@ export const updateUser = catchAsyncErrors(async (req, res, next) => {
     user,
   });
 });
-
 
 //Delete User -- ADMIN  => /api/v1/admin/user/:id
 export const deleteUser = catchAsyncErrors(async (req, res, next) => {
@@ -215,6 +224,6 @@ export const deleteUser = catchAsyncErrors(async (req, res, next) => {
   await user.deleteOne();
 
   res.status(200).json({
-    message: "User Deleted Successfully"
+    message: "User Deleted Successfully",
   });
 });
