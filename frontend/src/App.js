@@ -13,6 +13,7 @@ import UpdateProfile from "./components/User/UpdateProfile";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import UploadAvatar from "./components/User/UploadAvatar";
 import UpdatePassword from "./components/User/UpdatePassword";
+import ForgotPassword from "./components/auth/ForgotPassword";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="/product/:id" element={<ProductDetails />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/password/forgot" element={<ForgotPassword />} />
             <Route
               path="/me/profile"
               element={
