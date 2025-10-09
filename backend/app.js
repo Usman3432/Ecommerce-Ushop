@@ -21,7 +21,7 @@ dotenv.config({ path: "backend/config/config.env" });
 
 //Database connection
 dbConnection();
-app.use(express.json());
+app.use(express.json({ limit: '3mb' }));
 app.use(cookieParser());
 
 //Import all routes
