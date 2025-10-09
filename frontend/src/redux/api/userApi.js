@@ -27,8 +27,8 @@ export const userApi = createApi({
         return {
           url: "/profile/update",
           method: "PUT",
-          body
-        }
+          body,
+        };
       },
       invalidatesTags: ["User"],
     }),
@@ -37,13 +37,27 @@ export const userApi = createApi({
         return {
           url: "/me/upload_avatar",
           method: "PUT",
-          body
-        }
+          body,
+        };
       },
       invalidatesTags: ["User"],
-    })
+    }),
+    updatePassword: builder.mutation({
+      query(body) {
+        return {
+          url: "/password/update",
+          method: "PUT",
+          body,
+        };
+      },
+    }),
   }),
 });
 
 //Its a hook that can be used in components to load all variables(isloading var, success var, error var etc)
-export const { useGetMeQuery, useUpdateProfileMutation, useUploadAvatarMutation } = userApi;
+export const {
+  useGetMeQuery,
+  useUpdateProfileMutation,
+  useUploadAvatarMutation,
+  useUpdatePasswordMutation,
+} = userApi;

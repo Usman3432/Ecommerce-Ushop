@@ -152,7 +152,7 @@ export const updatePassword = catchAsyncErrors(async (req, res, next) => {
   }
 
   user.password = req.body.password;
-  user.save();
+  await user.save();
 
   res.status(200).json({
     success: true,
