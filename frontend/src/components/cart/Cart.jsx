@@ -3,7 +3,7 @@ import MetaData from "../layouts/MetaData";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
-import { setCartItems } from "../../redux/features/cartSlice";
+import { setCartItems, removeCartItem as removeCartItemAction } from "../../redux/features/cartSlice";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -33,6 +33,10 @@ const Cart = () => {
     };
     dispatch(setCartItems(cartItem));
   };
+
+  const removeCartItem = (id) => {
+    dispatch(removeCartItemAction(id))
+  }
 
   const subtotal =
     cartItems?.reduce((acc, item) => acc + item.quantity, 0) || 0;
@@ -100,6 +104,7 @@ const Cart = () => {
                         <i
                           id="delete_cart_item"
                           className="fa fa-trash btn btn-danger"
+                          onClick={() => removeCartItem(item?.product)}
                         ></i>
                       </div>
                     </div>
