@@ -8,7 +8,9 @@ const ProductItem = ({ product, columnSize }) => {
         <img
           className="card-img-top mx-auto"
           src={
-            product?.images[0] && product?.images[0]?.url && !product?.images[0]?.url.includes('example.com')
+            product?.images[0] &&
+            product?.images[0]?.url &&
+            !product?.images[0]?.url.includes("example.com")
               ? product?.images[0]?.url
               : "/images/default_product.png"
           }
