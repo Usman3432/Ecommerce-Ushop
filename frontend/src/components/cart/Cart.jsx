@@ -1,12 +1,13 @@
 import React from "react";
 import MetaData from "../layouts/MetaData";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { setCartItems, removeCartItem as removeCartItemAction } from "../../redux/features/cartSlice";
 
 const Cart = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const { cartItems } = useSelector((state) => state.cart);
 
   const incQuantity = (item, quantity) => {
@@ -42,6 +43,11 @@ const Cart = () => {
     cartItems?.reduce((acc, item) => acc + item.quantity, 0) || 0;
   const total =
     cartItems?.reduce((acc, item) => acc + item.price * item.quantity, 0) || 0;
+
+  
+    const checkout = () => {
+      navigate("/shipping")
+    }
 
   return (
     <>
@@ -131,7 +137,7 @@ const Cart = () => {
                   </span>
                 </p>
                 <hr />
-                <button id="checkout_btn" className="btn btn-primary w-100">
+                <button id="checkout_btn" className="btn btn-primary w-100" onClick={checkout}>
                   Check out
                 </button>
               </div>
