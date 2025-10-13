@@ -5,16 +5,26 @@ export const orderApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "/api/v1" }),
   endpoints: (builder) => ({
     createNewOrder: builder.mutation({
-        query(body) {
-            return {
-                url: "/order/new",
-                method: "POST",
-                body,
-            }
-        }
+      query(body) {
+        return {
+          url: "/order/new",
+          method: "POST",
+          body,
+        };
+      },
+    }),
+    stripeCheckoutSession: builder.mutation({
+      query(body) {
+        return {
+          url: "/payment/checkout_session",
+          method: "POST",
+          body,
+        };
+      },
     }),
   }),
 });
 
 //Its a hook that can be used in components to load all variables(isloading var, success var, error var etc)
-export const { useCreateNewOrderMutation } = orderApi;
+export const { useCreateNewOrderMutation, useStripeCheckoutSessionMutation } =
+  orderApi;
