@@ -13,6 +13,9 @@ export const orderApi = createApi({
         };
       },
     }),
+    myOrder: builder.query({
+      query: () => "/me/orders",
+    }),
     stripeCheckoutSession: builder.mutation({
       query(body) {
         return {
@@ -26,5 +29,8 @@ export const orderApi = createApi({
 });
 
 //Its a hook that can be used in components to load all variables(isloading var, success var, error var etc)
-export const { useCreateNewOrderMutation, useStripeCheckoutSessionMutation } =
-  orderApi;
+export const {
+  useCreateNewOrderMutation,
+  useStripeCheckoutSessionMutation,
+  useMyOrderQuery,
+} = orderApi;
