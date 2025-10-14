@@ -5,11 +5,10 @@ import dotenv from "dotenv";
 import productRoutes from "./rotues/productRouter.js";
 import cookieParser from "cookie-parser";
 import authRoutes from "./rotues/userRoutes.js";
-import orderRoutes from "./rotues/orderRoutes.js"
-import paymentRoutes from "./rotues/paymentRoute.js"
+import orderRoutes from "./rotues/orderRoutes.js";
+import paymentRoutes from "./rotues/paymentRoute.js";
 import { dbConnection } from "./config/dbConnect.js";
 import errorMiddleware from "./middlewares/error.js";
-
 
 //Handle uncaught exceptions
 process.on("uncaughtException", (err) => {
@@ -22,7 +21,14 @@ dotenv.config({ path: "backend/config/config.env" });
 
 //Database connection
 dbConnection();
-app.use(express.json({ limit: '3mb' }));
+app.use(
+  express.json({
+    limit: "3mb",
+    verify: (req, res, buf) => {
+      req.rawBody = buf.toString();
+    },
+  })
+);
 app.use(cookieParser());
 
 //Import all routes
