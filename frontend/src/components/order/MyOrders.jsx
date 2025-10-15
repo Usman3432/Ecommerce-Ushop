@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import MetaData from "../layouts/MetaData";
 import Loader from "../layouts/Loader";
 import { useMyOrderQuery } from "../../redux/api/orderApi";
 import toast from "react-hot-toast";
@@ -34,10 +35,13 @@ const MyOrders = () => {
         orderStatus: order?.orderStatus,
         actions: (
           <>
-            <Link to={`/me/orders/${order?._id}`} className="btn btn-primary">
+            <Link to={`/me/order/${order?._id}`} className="btn btn-primary">
               <i className="fa fa-eye"></i>
             </Link>
-            <Link to={`/invoice/order/${order?._id}`} className="btn btn-success ms-2">
+            <Link
+              to={`/invoice/order/${order?._id}`}
+              className="btn btn-success ms-2"
+            >
               <i className="fa fa-print"></i>
             </Link>
           </>
@@ -50,16 +54,19 @@ const MyOrders = () => {
 
   if (isLoading) return <Loader />;
   return (
-    <div>
-      <h1 className="my-5">{data?.order?.length} Order(s)</h1>
-      <MDBDataTable
-        data={setOrders()}
-        className="px-3"
-        bordered
-        striped
-        hover
-      />
-    </div>
+    <>
+      <MetaData title={"My Orders"} />
+      <div>
+        <h1 className="my-5">{data?.order?.length} Order(s)</h1>
+        <MDBDataTable
+          data={setOrders()}
+          className="px-3"
+          bordered
+          striped
+          hover
+        />
+      </div>
+    </>
   );
 };
 
