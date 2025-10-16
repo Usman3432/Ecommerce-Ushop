@@ -25,7 +25,7 @@ const PaymentMethod = () => {
 
     if(isSuccess){
         toast.success("New order has been created")
-        navigate("/")
+        navigate("/me/orders?order_success=true")
     }
   }, [error, isSuccess])
   const submitHandler = (e) => {
