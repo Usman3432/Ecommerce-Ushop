@@ -3,7 +3,6 @@ import {
   useCanUserReviewQuery,
   useSubmitReviewMutation,
 } from "../../redux/api/productsApi";
-import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const NewReview = ({ productId }) => {
@@ -11,7 +10,6 @@ const NewReview = ({ productId }) => {
   const [comment, setComment] = useState("");
   const [submitReview, { isLoading, error, isSuccess }] =
     useSubmitReviewMutation();
-  const params = useParams();
   const { data } = useCanUserReviewQuery(productId);
   const canReview = data?.canReview;
 

@@ -29,13 +29,13 @@ const ProductDetails = () => {
         ? product?.images[0]?.url
         : "/images/default_product.png"
     );
-  });
+  }, [product?.images]);
 
   useEffect(() => {
     if (isError) {
       toast.error(error?.data?.message);
     }
-  }, [isError]);
+  }, [isError, error?.data?.message]);
 
   const incQuantity = () => {
     const count = document.querySelector(".count");
@@ -82,9 +82,9 @@ const ProductDetails = () => {
             />
           </div>
           <div className="row justify-content-start mt-5">
-            {product?.images?.map((img) => {
-              <div className="col-2 ms-4 mt-2">
-                <a role="button">
+            {product?.images?.map((img) => (
+              <div className="col-2 ms-4 mt-2" key={img._id}>
+                <button style={{ border: 'none', background: 'none' }}>
                   <img
                     className={`d-block border rounded p-3 cursor-pointer ${
                       img.url === activeImg ? "border-warning" : ""
@@ -95,9 +95,9 @@ const ProductDetails = () => {
                     alt={img?.url}
                     onClick={(e) => setActiveImg(img?.url)}
                   />
-                </a>
-              </div>;
-            })}
+                </button>
+              </div>
+            ))}
           </div>
         </div>
 
