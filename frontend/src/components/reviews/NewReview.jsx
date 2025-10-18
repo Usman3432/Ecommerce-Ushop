@@ -1,22 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { useSubmitReviewMutation } from '../../redux/api/productsApi';
-import { useParams } from 'react-router-dom';
-import toast from 'react-hot-toast';
+import React, { useState, useEffect } from "react";
+import {
+  useCanUserReviewQuery,
+  useSubmitReviewMutation,
+} from "../../redux/api/productsApi";
+import { useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
-const NewReview = () => {
+const NewReview = ({ productId }) => {
   const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState('');
-  const [submitReview, { isLoading, error, isSuccess }] = useSubmitReviewMutation();
+  const [comment, setComment] = useState("");
+  const [submitReview, { isLoading, error, isSuccess }] =
+    useSubmitReviewMutation();
   const params = useParams();
+  const { data } = useCanUserReviewQuery(productId);
+  const canReview = data?.canReview;
 
   useEffect(() => {
     if (error) {
       toast.error(error?.data?.message);
     }
     if (isSuccess) {
-      toast.success('Review submitted successfully');
+      toast.success("Review submitted successfully");
       setRating(0);
-      setComment('');
+      setComment("");
     }
   }, [error, isSuccess]);
 
@@ -24,7 +30,7 @@ const NewReview = () => {
     const reviewData = {
       rating,
       comment,
-      productId: params?.id,
+      productId
     };
     submitReview(reviewData);
   };
@@ -32,15 +38,17 @@ const NewReview = () => {
   return (
     <>
       <div>
-        <button
-          id="review_btn"
-          type="button"
-          className="btn btn-primary mt-4"
-          data-bs-toggle="modal"
-          data-bs-target="#ratingModal"
-        >
-          Submit Your Review
-        </button>
+        {canReview && (
+          <button
+            id="review_btn"
+            type="button"
+            className="btn btn-primary mt-4"
+            data-bs-toggle="modal"
+            data-bs-target="#ratingModal"
+          >
+            Submit Your Review
+          </button>
+        )}
 
         <div className="row mt-2 mb-5">
           <div className="rating w-50">
@@ -99,7 +107,7 @@ const NewReview = () => {
                       data-bs-dismiss="modal"
                       aria-label="Close"
                     >
-                      {isLoading ? 'Submitting...' : 'Submit'}
+                      {isLoading ? "Submitting..." : "Submit"}
                     </button>
                   </div>
                 </div>

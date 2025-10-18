@@ -30,8 +30,11 @@ export const productApi = createApi({
       }),
       invalidatesTags: ["Product"],
     }),
+    canUserReview: builder.query({
+      query: (productId) => `/can_review?productId=${productId}`,
+    }),
   }),
 });
 
 //Its a hook that can be used in components to load all variables(isloading var, success var, error var etc)
-export const { useGetProductsQuery, useGetProductDetailsQuery, useSubmitReviewMutation } = productApi;
+export const { useGetProductsQuery, useGetProductDetailsQuery, useSubmitReviewMutation, useCanUserReviewQuery } = productApi;

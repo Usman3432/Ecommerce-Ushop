@@ -174,7 +174,7 @@ const ProductDetails = () => {
           </p>
 
           {isAuthenticated ? (
-            <NewReview />
+            <NewReview productId={params?.id} />
           ) : (
             <div className="alert alert-danger my-5" type="alert">
               Login to post your review.
