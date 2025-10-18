@@ -1,0 +1,115 @@
+import React, { useState, useEffect } from 'react';
+import { useSubmitReviewMutation } from '../../redux/api/productsApi';
+import { useParams } from 'react-router-dom';
+import toast from 'react-hot-toast';
+
+const NewReview = () => {
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState('');
+  const [submitReview, { isLoading, error, isSuccess }] = useSubmitReviewMutation();
+  const params = useParams();
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error?.data?.message);
+    }
+    if (isSuccess) {
+      toast.success('Review submitted successfully');
+      setRating(0);
+      setComment('');
+    }
+  }, [error, isSuccess]);
+
+  const submitHandler = () => {
+    const reviewData = {
+      rating,
+      comment,
+      productId: params?.id,
+    };
+    submitReview(reviewData);
+  };
+
+  return (
+    <>
+      <div>
+        <button
+          id="review_btn"
+          type="button"
+          className="btn btn-primary mt-4"
+          data-bs-toggle="modal"
+          data-bs-target="#ratingModal"
+        >
+          Submit Your Review
+        </button>
+
+        <div className="row mt-2 mb-5">
+          <div className="rating w-50">
+            <div
+              className="modal fade"
+              id="ratingModal"
+              tabIndex="-1"
+              role="dialog"
+              aria-labelledby="ratingModalLabel"
+              aria-hidden="true"
+            >
+              <div className="modal-dialog" role="document">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title" id="ratingModalLabel">
+                      Submit Review
+                    </h5>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div className="modal-body">
+                    <div className="d-flex">
+                      {[...Array(5)].map((_, index) => (
+                        <span
+                          key={index}
+                          style={{
+                            color: index < rating ? "#ffc107" : "#e0e0e0",
+                            fontSize: "16px",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => setRating(index + 1)}
+                        >
+                          ★
+                        </span>
+                      ))}
+                    </div>
+
+                    <textarea
+                      name="review"
+                      id="review"
+                      className="form-control mt-4"
+                      placeholder="Enter your comment"
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                    ></textarea>
+
+                    <button
+                      id="new_review_btn"
+                      className="btn w-100 my-4 px-4"
+                      onClick={submitHandler}
+                      disabled={isLoading}
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      {isLoading ? 'Submitting...' : 'Submit'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default NewReview;

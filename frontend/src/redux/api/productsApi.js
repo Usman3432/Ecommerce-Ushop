@@ -20,8 +20,15 @@ export const productApi = createApi({
     getProductDetails: builder.query({
       query: (id) => `/products/${id}`,
     }),
+    submitReview: builder.mutation({
+      query: (body) => ({
+        url: "/reviews",
+        method: "PUT",
+        body,
+      }),
+    }),
   }),
 });
 
 //Its a hook that can be used in components to load all variables(isloading var, success var, error var etc)
-export const { useGetProductsQuery, useGetProductDetailsQuery } = productApi;
+export const { useGetProductsQuery, useGetProductDetailsQuery, useSubmitReviewMutation } = productApi;
