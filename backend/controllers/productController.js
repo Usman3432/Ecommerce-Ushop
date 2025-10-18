@@ -27,7 +27,9 @@ export const getProducts = catchAsyncErrors(async (req, res, next) => {
 
 // Get Single Product details      =>   /api/v1/products/:id
 export const singleProduct = catchAsyncErrors(async (req, res, next) => {
-  const product = await Product.findById(req?.params?.id);
+  const product = await Product.findById(req?.params?.id).populate(
+    "reviews.user"
+  );
   if (!product) {
     return next(new ErrorHadler("Product not found!", 404));
   }
@@ -144,8 +146,7 @@ export const deleteReview = catchAsyncErrors(async (req, res, next) => {
   const ratings =
     numOfReviews === 0
       ? 0
-      : reviews.reduce((acc, item) => item.rating + acc, 0) /
-        numOfReviews;
+      : reviews.reduce((acc, item) => item.rating + acc, 0) / numOfReviews;
 
   product = await Product.findByIdAndUpdate(
     req.query.productId,
