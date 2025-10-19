@@ -3,6 +3,7 @@ import {
     deleteOrder,
   getAllOrders,
   getOrderDetails,
+  getSales,
   newOrder,
   updateOrder,
   userOrderDetails,
@@ -23,4 +24,8 @@ router
   .route("/admin/order/:id")
   .put(isAuthenticated, authorizeRoles("admin"), updateOrder)
   .delete(isAuthenticated, authorizeRoles("admin"), deleteOrder);
+
+router
+  .route("/admin/get_sales")
+  .get(isAuthenticated, authorizeRoles("admin"), getSales)
 export default router;

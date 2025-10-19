@@ -4,7 +4,6 @@ import cartReducer from "./features/cartSlice.js";
 import { productApi } from "./api/productsApi";
 import { authApi } from "./api/authApi";
 import { userApi } from "./api/userApi";
-import { cartSlice } from "./features/cartSlice.js";
 import { orderApi } from "./api/orderApi.js";
 
 export const store = configureStore({

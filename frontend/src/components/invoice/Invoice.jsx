@@ -18,8 +18,6 @@ const Invoice = () => {
     orderItems,
     paymentInfo,
     user,
-    totalAmount,
-    orderStatus,
   } = order;
 
   useEffect(() => {

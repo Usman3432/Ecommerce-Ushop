@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import MetaData from "../layouts/MetaData";
 import Loader from "../layouts/Loader";
 import { useMyOrderQuery } from "../../redux/api/orderApi";
@@ -25,7 +25,7 @@ const MyOrders = () => {
       dispatch(clearCart());
       navigate("/me/orders");
     }
-  }, [error, orderSuccess]);
+  }, [error, orderSuccess, dispatch, navigate]);
 
   const setOrders = () => {
     const orders = {

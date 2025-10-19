@@ -2,7 +2,6 @@ import React from "react";
 import MetaData from "../layouts/MetaData";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
 import { setCartItems, removeCartItem as removeCartItemAction } from "../../redux/features/cartSlice";
 
 const Cart = () => {

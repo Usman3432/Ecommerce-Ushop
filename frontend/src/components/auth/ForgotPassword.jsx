@@ -23,7 +23,7 @@ const ForgotPassword = () => {
     if (isSuccess) {
       toast.success("Check your email to change your password");
     }
-  }, [error, isAuthenticated, isSuccess]);
+  }, [error, isAuthenticated, isSuccess, navigate]);
 
   const submitHandler = (e) => {
     e.preventDefault();

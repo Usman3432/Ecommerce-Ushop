@@ -1,14 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AdminLayout from "../layouts/AdminLayout";
 import DatePicker from "react-datepicker";
-import SalesChart from "../charts/SalesChart"
-
+import SalesChart from "../charts/SalesChart";
+import toast from "react-hot-toast";
+import Loader from "../layouts/Loader"
 
 import "react-datepicker/dist/react-datepicker.css";
+import { useLazyGetSalesQuery } from "../../redux/api/orderApi";
 
 const Dashboard = () => {
   const [startDate, setStartDate] = useState(new Date().setDate(1));
   const [endDate, setEndDate] = useState(new Date());
+
+  const [getSales, { isLoading, error, data }] = useLazyGetSalesQuery();
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error?.data?.message);
+    }
+    if (startDate && endDate && !data) {
+      getSales({
+        startDate: new Date(startDate).toISOString(),
+        endDate: endDate.toISOString(),
+      });
+    }
+  }, [error, startDate, endDate, getSales, data]);
+
+  const submitHandler = () => {
+    getSales({
+      startDate: new Date(startDate).toISOString(),
+      endDate: endDate.toISOString(),
+    });
+  };
+  if(isLoading) return <Loader />
   return (
     <AdminLayout>
       <div className="d-flex justify-content-start align-items-center">
@@ -35,7 +59,12 @@ const Dashboard = () => {
             className="form-control"
           />
         </div>
-        <button className="btn fetch-btn ms-4 mt-3 px-5">Fetch</button>
+        <button
+          className="btn fetch-btn ms-4 mt-3 px-5"
+          onClick={submitHandler}
+        >
+          Fetch
+        </button>
       </div>
 
       <div className="row pr-4 my-5">
@@ -45,7 +74,7 @@ const Dashboard = () => {
               <div className="text-center card-font-size">
                 Sales
                 <br />
-                <b>$0.00</b>
+                <b>${data?.totalSales?.toFixed(2)}</b>
               </div>
             </div>
           </div>
@@ -57,13 +86,13 @@ const Dashboard = () => {
               <div className="text-center card-font-size">
                 Orders
                 <br />
-                <b>0</b>
+                <b>{data?.totalNumOrders}</b>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <SalesChart />
+      <SalesChart salesData={data?.sales} />
 
       <div className="mb-5"></div>
     </AdminLayout>

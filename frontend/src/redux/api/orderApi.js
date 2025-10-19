@@ -28,6 +28,10 @@ export const orderApi = createApi({
         };
       },
     }),
+    getSales: builder.query({
+      query: ({ startDate, endDate }) =>
+        `/admin/get_sales?startDate=${startDate}&endDate=${endDate}`,
+    }),
   }),
 });
 
@@ -36,5 +40,6 @@ export const {
   useCreateNewOrderMutation,
   useStripeCheckoutSessionMutation,
   useMyOrderQuery,
-  useOrderDetailsQuery
+  useOrderDetailsQuery,
+  useLazyGetSalesQuery,
 } = orderApi;
