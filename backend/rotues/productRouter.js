@@ -3,6 +3,7 @@ import {
   canUserReview,
   deleteProducts,
   deleteReview,
+  getAdminProducts,
   getProductReview,
   getProducts,
   newProducts,
@@ -17,7 +18,8 @@ const router = express.Router();
 router.route("/products").get(getProducts);
 router
   .route("/admin/products")
-  .post(isAuthenticated, authorizeRoles("admin"), newProducts);
+  .post(isAuthenticated, authorizeRoles("admin"), newProducts)
+  .get(isAuthenticated, authorizeRoles("admin"), getAdminProducts);
 router.route("/products/:id").get(singleProduct);
 router
   .route("/admin/products/:id")

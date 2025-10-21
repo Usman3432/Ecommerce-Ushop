@@ -14,13 +14,13 @@ export const productApi = createApi({
           category: params?.category,
           "price[gte]": params.min,
           "price[lte]": params.max,
-          "ratings[gte]": params?.ratings
+          "ratings[gte]": params?.ratings,
         },
       }),
     }),
     getProductDetails: builder.query({
       query: (id) => `/products/${id}`,
-      providesTags: ["Product"]
+      providesTags: ["Product"],
     }),
     submitReview: builder.mutation({
       query: (body) => ({
@@ -33,8 +33,17 @@ export const productApi = createApi({
     canUserReview: builder.query({
       query: (productId) => `/can_review?productId=${productId}`,
     }),
+    getAdminProducts: builder.query({
+      query: () => `/admin/products`,
+    }),
   }),
 });
 
 //Its a hook that can be used in components to load all variables(isloading var, success var, error var etc)
-export const { useGetProductsQuery, useGetProductDetailsQuery, useSubmitReviewMutation, useCanUserReviewQuery } = productApi;
+export const {
+  useGetProductsQuery,
+  useGetProductDetailsQuery,
+  useSubmitReviewMutation,
+  useCanUserReviewQuery,
+  useGetAdminProductsQuery,
+} = productApi;

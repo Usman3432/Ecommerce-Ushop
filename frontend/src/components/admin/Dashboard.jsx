@@ -7,6 +7,7 @@ import Loader from "../layouts/Loader"
 
 import "react-datepicker/dist/react-datepicker.css";
 import { useLazyGetSalesQuery } from "../../redux/api/orderApi";
+import MetaData from "../layouts/MetaData";
 
 const Dashboard = () => {
   const [startDate, setStartDate] = useState(new Date().setDate(1));
@@ -35,6 +36,7 @@ const Dashboard = () => {
   if(isLoading) return <Loader />
   return (
     <AdminLayout>
+      <MetaData title={"Dashboard"} />
       <div className="d-flex justify-content-start align-items-center">
         <div className="mb-3 me-4">
           <label className="form-label d-block">Start Date</label>
