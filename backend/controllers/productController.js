@@ -49,7 +49,7 @@ export const getAdminProducts = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-// Create new Products      =>   /api/v1/admin/products
+// Create new Products      =>   /api/v1/admin/product/new
 export const newProducts = catchAsyncErrors(async (req, res) => {
   req.body.user = req.user._id;
   const product = await Product.create(req.body);

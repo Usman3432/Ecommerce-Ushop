@@ -20,6 +20,9 @@ router
   .route("/admin/products")
   .post(isAuthenticated, authorizeRoles("admin"), newProducts)
   .get(isAuthenticated, authorizeRoles("admin"), getAdminProducts);
+router
+  .route("/admin/product/new")
+  .post(isAuthenticated, authorizeRoles("admin"), newProducts)
 router.route("/products/:id").get(singleProduct);
 router
   .route("/admin/products/:id")
