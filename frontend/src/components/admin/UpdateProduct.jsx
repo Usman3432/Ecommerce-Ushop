@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import MetaData from "../layouts/MetaData";
 import AdminLayout from "../layouts/AdminLayout";
-import { useNavigate } from "react-router-dom";
-import { useCreateProductMutation } from "../../redux/api/productsApi";
+import { useNavigate, useParams } from "react-router-dom";
+import { useGetProductDetailsQuery, useUpdateProductMutation } from "../../redux/api/productsApi";
 import toast from "react-hot-toast";
 import { PRODUCT_CATEGORIES } from "../../constants/constants";
 
-const NewProduct = () => {
+const UpdateProduct = () => {
   const navigate = useNavigate();
+  const params = useParams();
   const [product, setProduct] = useState({
     name: "",
     description: "",
@@ -17,18 +18,30 @@ const NewProduct = () => {
     seller: "",
   });
 
-  const [createProduct, { isLoading, error, isSuccess }] =
-    useCreateProductMutation();
+  const [updateProduct, { isLoading, error, isSuccess }] =
+    useUpdateProductMutation()
+
+    const {data} = useGetProductDetailsQuery(params?.id);
 
   useEffect(() => {
+    if(data?.product){
+        setProduct({
+            name: data?.product?.name,
+            description: data?.product?.description,
+            price: data?.product?.price,
+            category: data?.product?.category,
+            stock: data?.product?.stock,
+            seller: data?.product?.seller,
+        })
+    }
     if (error) {
       toast.error(error?.data?.message);
     }
     if (isSuccess) {
-      toast.success("Product is created successfully!");
+      toast.success("Product is updated successfully!");
       navigate("/admin/products");
     }
-  }, [error, isSuccess, navigate]);
+  }, [error, isSuccess,data, navigate]);
   const { name, description, price, category, stock, seller } = product;
   const onChange = (e) => {
     setProduct({ ...product, [e.target.name]: e.target.value });
@@ -36,16 +49,16 @@ const NewProduct = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    createProduct(product);
+    updateProduct({ id: params?.id, body: product });
   };
 
   return (
     <AdminLayout>
-      <MetaData title={"New Product"} />
+      <MetaData title={"Update Product"} />
       <div className="row wrapper">
         <div className="col-10 col-lg-10 mt-5 mt-lg-0">
           <form className="shadow rounded bg-body" onSubmit={submitHandler}>
-            <h2 className="mb-4">New Product</h2>
+            <h2 className="mb-4">Update Product</h2>
             <div className="mb-3">
               <label for="name_field" className="form-label">
                 {" "}
@@ -146,7 +159,7 @@ const NewProduct = () => {
               className="btn w-100 py-2"
               disabled={isLoading}
             >
-              {isLoading ? "Creating..." : "CREATE"}
+              {isLoading ? "Updating..." : "Update"}
             </button>
           </form>
         </div>
@@ -155,4 +168,4 @@ const NewProduct = () => {
   );
 };
 
-export default NewProduct;
+export default UpdateProduct;
