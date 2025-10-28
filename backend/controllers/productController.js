@@ -3,6 +3,7 @@ import Product from "../models/product.js";
 import APIFILTERS from "../utils/apiFilters.js";
 import ErrorHadler from "../utils/error_handler.js";
 import Order from "../models/orderModel.js";
+import { upload_file } from "../utils/cloudinary.js";
 
 // Get all Products      =>   /api/v1/products
 export const getProducts = catchAsyncErrors(async (req, res, next) => {
@@ -42,8 +43,8 @@ export const singleProduct = catchAsyncErrors(async (req, res, next) => {
 
 // Get Products -ADMIN      =>   /api/v1/admin/products
 export const getAdminProducts = catchAsyncErrors(async (req, res, next) => {
-  const products = await Product.find()
-  
+  const products = await Product.find();
+
   res.status(200).json({
     products,
   });
@@ -75,7 +76,6 @@ export const updateProduct = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-
 // Can user review      =>   /api/v1/can_review
 export const canUserReview = catchAsyncErrors(async (req, res, next) => {
   const orders = await Order.find({
@@ -92,6 +92,22 @@ export const canUserReview = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+// Upload product images      =>   /api/v1/product/:id/upload_image
+export const productImageUpload = catchAsyncErrors(async (req, res, next) => {
+  let product = await Product.findById(req?.params?.id);
+  if (!product) {
+    return next(new ErrorHadler("Product not found!", 404));
+  }
+  const uploader = async (image) => upload_file(image, "Ushop/products");
+  const urls = await Promise.all((req?.body?.images).map(uploader));
+
+  product?.images?.push(...urls);
+  await product?.save();
+
+  res.status(200).json({
+    product,
+  });
+});
 
 // Delete Products      =>   /api/v1/admin/products
 export const deleteProducts = catchAsyncErrors(async (req, res, next) => {

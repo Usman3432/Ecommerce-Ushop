@@ -7,6 +7,7 @@ import {
   getProductReview,
   getProducts,
   newProducts,
+  productImageUpload,
   productReview,
   singleProduct,
   updateProduct,
@@ -21,8 +22,11 @@ router
   .post(isAuthenticated, authorizeRoles("admin"), newProducts)
   .get(isAuthenticated, authorizeRoles("admin"), getAdminProducts);
 router
+  .route("/admin/products/:id/upload_image")
+  .put(isAuthenticated, authorizeRoles("admin"), productImageUpload);
+router
   .route("/admin/product/new")
-  .post(isAuthenticated, authorizeRoles("admin"), newProducts)
+  .post(isAuthenticated, authorizeRoles("admin"), newProducts);
 router.route("/products/:id").get(singleProduct);
 router
   .route("/admin/products/:id")
@@ -36,7 +40,7 @@ router
   .put(isAuthenticated, productReview)
   .get(isAuthenticated, getProductReview);
 
-router.route("/can_review").get(isAuthenticated, canUserReview)
+router.route("/can_review").get(isAuthenticated, canUserReview);
 
 router
   .route("/admin/review")
