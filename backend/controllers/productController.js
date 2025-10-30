@@ -3,7 +3,7 @@ import Product from "../models/product.js";
 import APIFILTERS from "../utils/apiFilters.js";
 import ErrorHadler from "../utils/error_handler.js";
 import Order from "../models/orderModel.js";
-import { upload_file } from "../utils/cloudinary.js";
+import { delete_file, upload_file } from "../utils/cloudinary.js";
 
 // Get all Products      =>   /api/v1/products
 export const getProducts = catchAsyncErrors(async (req, res, next) => {
@@ -102,6 +102,27 @@ export const productImageUpload = catchAsyncErrors(async (req, res, next) => {
   const urls = await Promise.all((req?.body?.images).map(uploader));
 
   product?.images?.push(...urls);
+  await product?.save();
+
+  res.status(200).json({
+    product,
+  });
+});
+
+// Delete product images      =>   /api/v1/product/:id/delete_image
+export const productImageDelete = catchAsyncErrors(async (req, res, next) => {
+  let product = await Product.findById(req?.params?.id);
+  if (!product) {
+    return next(new ErrorHadler("Product not found!", 404));
+  }
+
+  // Attempt to delete from Cloudinary (ignore failure for seeded/non-existent images)
+  await delete_file(req.body.imgId);
+
+  // Always remove from database
+  product.images = product?.images?.filter(
+    (img) => img.public_id !== req.body.imgId
+  );
   await product?.save();
 
   res.status(200).json({

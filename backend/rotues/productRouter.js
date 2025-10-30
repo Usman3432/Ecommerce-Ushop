@@ -7,6 +7,7 @@ import {
   getProductReview,
   getProducts,
   newProducts,
+  productImageDelete,
   productImageUpload,
   productReview,
   singleProduct,
@@ -24,6 +25,9 @@ router
 router
   .route("/admin/products/:id/upload_image")
   .put(isAuthenticated, authorizeRoles("admin"), productImageUpload);
+router
+  .route("/admin/products/:id/delete_image")
+  .put(isAuthenticated, authorizeRoles("admin"), productImageDelete);
 router
   .route("/admin/product/new")
   .post(isAuthenticated, authorizeRoles("admin"), newProducts);
