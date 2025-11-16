@@ -189,10 +189,12 @@ export const productReview = catchAsyncErrors(async (req, res, next) => {
 
 // Get Product Review      =>   /api/v1/review
 export const getProductReview = catchAsyncErrors(async (req, res, next) => {
-  const product = await Product.findById(req.query.id);
+  const product = await Product.findById(req.query.id).populate("reviews.user");
   if (!product) {
     return next(new ErrorHadler("Product not found!", 404));
   }
+
+  
 
   res.status(200).json({
     reviews: product.reviews,
