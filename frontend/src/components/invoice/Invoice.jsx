@@ -93,8 +93,8 @@ const Invoice = () => {
             </thead>
             <tbody>
                 {orderItems?.map((item)=>(
-                    <tr key={item?.product}>
-                <td className="service">{item?.product}</td>
+                    <tr key={item?.product?._id}>
+                <td className="service">{item?.product?._id}</td>
                 <td className="desc">{item?.name}</td>
                 <td className="unit">${Number(item?.price).toFixed(2)}</td>
                 <td className="qty">{item?.quantity}</td>

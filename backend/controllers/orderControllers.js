@@ -36,10 +36,9 @@ export const newOrder = catchAsyncErrors(async (req, res, next) => {
 
 // Get order Details        => /api/v1/orders/:id
 export const getOrderDetails = catchAsyncErrors(async (req, res, next) => {
-  const order = await Order.findById(req.params.id).populate(
-    "user",
-    "name email"
-  );
+  const order = await Order.findById(req.params.id)
+    .populate("user", "name email")
+    .populate("orderItems.product", "name images");
   if (!order) {
     return next(new ErrorHandler("Order did not found with this id", 404));
   }
@@ -81,11 +80,23 @@ export const updateOrder = catchAsyncErrors(async (req, res, next) => {
   if (order?.orderStatus === "Delivered") {
     return next(new ErrorHandler("You have already delivered this order", 404));
   }
-  order?.orderItems?.forEach(async (item) => {
+
+  let productNotFound = false;
+
+  //update product stock
+  for (const item of order.orderItems) {
     const product = await Product.findById(item?.product?.toString());
+    if (!product) {
+      productNotFound = true;
+      break;
+    }
     product.stock = product.stock - item.quantity;
     await product.save({ validateBeforeSave: false });
-  });
+  }
+
+  if (productNotFound) {
+    return next(new ErrorHandler("No Product found with one or more IDs", 404));
+  }
 
   order.orderStatus = req.body.status;
   order.deliveredAt = Date.now();

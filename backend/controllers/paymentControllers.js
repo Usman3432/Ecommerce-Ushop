@@ -74,7 +74,7 @@ const getOrderItems = async (line_items) => {
         name: product.name,
         price: (item.price.unit_amount / 100).toString(),
         quantity: item.quantity,
-        image: product.images[0],
+        image: product.images[0].url,
       };
     })
   );

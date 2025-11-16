@@ -1,14 +1,21 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import MetaData from "../layouts/MetaData";
-import { useOrderDetailsQuery } from "../../redux/api/orderApi";
-import { Link, useParams } from "react-router-dom";
-import toast from "react-hot-toast";
+import {
+  useOrderDetailsQuery,
+  useUpdateOrderMutation,
+} from "../../redux/api/orderApi";
 import Loader from "../layouts/Loader";
+import toast from "react-hot-toast";
+import AdminLayout from "../layouts/AdminLayout";
+import { Link, useParams } from "react-router-dom";
 
-const OrderDetails = () => {
+const ProcessOrder = () => {
+  const [status, setStatus] = useState("");
   const params = useParams();
-  const { data, isLoading, error } = useOrderDetailsQuery(params?.id);
+  const { data } = useOrderDetailsQuery(params?.id);
   const order = data?.order || {};
+
+  const [updateOrder, { error, isSuccess }] = useUpdateOrderMutation();
 
   const {
     shippingInfo,
@@ -19,27 +26,33 @@ const OrderDetails = () => {
     orderStatus,
   } = order;
 
-  const isPaid = paymentInfo?.status === "paid"? true: false
+  const isPaid = paymentInfo?.status === "paid" ? true : false;
 
+  useEffect(() => {
+    if (orderStatus) {
+      setStatus(orderStatus);
+    }
+  }, [orderStatus]);
   useEffect(() => {
     if (error) {
       toast.error(error?.data?.message);
     }
-  }, [error]);
+    if (isSuccess) {
+      toast.success("Order updated!");
+    }
+  }, [error, isSuccess]);
 
-  if (isLoading) return <Loader />;
-
+  const updateOrderHandler = (id) => {
+    const data = { status };
+    updateOrder({ id, body: data });
+  };
   return (
-    <>
-      <MetaData title={"Order Details"} />
-      <div className="row d-flex justify-content-center">
-        <div className="col-12 col-lg-9 mt-5 order-details">
-          <div className="d-flex justify-content-between align-items-center">
-            <h3 className="mt-5 mb-4">Your Order Details</h3>
-            <a className="btn btn-success" href={`/invoice/order/${order?._id}`}>
-              <i className="fa fa-print"></i> Invoice
-            </a>
-          </div>
+    <AdminLayout>
+      <MetaData title={"Process Orders"} />
+      <div className="row d-flex justify-content-around">
+        <div className="col-12 col-lg-8 order-details">
+          <h3 className="mt-5 mb-4">Order Details</h3>
+
           <table className="table table-striped table-bordered">
             <tbody>
               <tr>
@@ -47,7 +60,7 @@ const OrderDetails = () => {
                 <td>{order?._id}</td>
               </tr>
               <tr>
-                <th scope="row">Status</th>
+                <th scope="row">Order Status</th>
                 <td
                   className={
                     String(orderStatus).includes("Delivered")
@@ -57,10 +70,6 @@ const OrderDetails = () => {
                 >
                   <b>{orderStatus}</b>
                 </td>
-              </tr>
-              <tr>
-                <th scope="row">Date</th>
-                <td>{new Date(order?.createdAt).toLocaleString("en-US")}</td>
               </tr>
             </tbody>
           </table>
@@ -91,7 +100,7 @@ const OrderDetails = () => {
             <tbody>
               <tr>
                 <th scope="row">Status</th>
-                <td className={isPaid? "greenColor": "redColor"}>
+                <td className={isPaid ? "greenColor" : "redColor"}>
                   <b>{paymentInfo?.status}</b>
                 </td>
               </tr>
@@ -115,7 +124,7 @@ const OrderDetails = () => {
           <hr />
           <div className="cart-item my-1">
             {orderItems?.map((item) => (
-              <div key={item.product} className="row my-5">
+              <div key={item?.product?._id} className="row my-5">
                 <div className="col-4 col-lg-2">
                   <img
                     src={
@@ -124,14 +133,14 @@ const OrderDetails = () => {
                         ? item?.product?.images?.[0]?.url
                         : "/images/default_product.png"
                     }
-                    alt={item.name}
+                    alt={item?.name}
                     height="45"
                     width="65"
                   />
                 </div>
 
                 <div className="col-5 col-lg-5">
-                  <Link to={`/products/${item.product}`}>{item.name}</Link>
+                  <Link to={`/products/${item.product?._id}`}>{item.name}</Link>
                 </div>
 
                 <div className="col-4 col-lg-2 mt-4 mt-lg-0">
@@ -146,9 +155,41 @@ const OrderDetails = () => {
           </div>
           <hr />
         </div>
+
+        <div className="col-12 col-lg-3 mt-5">
+          <h4 className="my-4">Status</h4>
+
+          <div className="mb-3">
+            <select
+              className="form-select"
+              name="status"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+            >
+              <option value="Processing">Processing</option>
+              <option value="Shipped">Shipped</option>
+              <option value="Delivered">Delivered</option>
+            </select>
+          </div>
+
+          <button
+            className="btn btn-primary w-100"
+            onClick={() => updateOrderHandler(order?._id)}
+          >
+            Update Status
+          </button>
+
+          <h4 className="mt-5 mb-3">Order Invoice</h4>
+          <Link
+            to={`/invoice/order/${order?._id}`}
+            className="btn btn-success w-100"
+          >
+            <i className="fa fa-print"></i> Generate Invoice
+          </Link>
+        </div>
       </div>
-    </>
+    </AdminLayout>
   );
 };
 
-export default OrderDetails;
+export default ProcessOrder;
