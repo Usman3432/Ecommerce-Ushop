@@ -31,7 +31,7 @@ router.route("/me/upload_avatar").put(isAuthenticated, uploadAvatar);
 
 router.route("/admin/users").get(isAuthenticated, authorizeRoles('admin'), getAllUsers);
 router
-  .route("/admin/user/:id")
+  .route("/admin/users/:id")
   .get(isAuthenticated, authorizeRoles('admin'), getUserDetails)
   .put(isAuthenticated, authorizeRoles('admin'), updateUser)
   .delete(isAuthenticated, authorizeRoles('admin'), deleteUser);
