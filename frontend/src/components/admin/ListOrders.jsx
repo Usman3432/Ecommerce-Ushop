@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import MetaData from "../layouts/MetaData";
-import { useGetAdminOrdersQuery } from "../../redux/api/orderApi";
+import { useDeleteOrderMutation, useGetAdminOrdersQuery } from "../../redux/api/orderApi";
 import Loader from "../layouts/Loader";
 import toast from "react-hot-toast";
 import { MDBDataTable } from "mdbreact";
@@ -9,6 +9,8 @@ import AdminLayout from "../layouts/AdminLayout";
 
 const ListOrders = () => {
   const { data, isLoading, error } = useGetAdminOrdersQuery();
+
+  const [deleteOrder, { error: deleteError, isSuccess, isLoading: isDeleteLoading}] = useDeleteOrderMutation();
   
 
   useEffect(() => {
@@ -16,18 +18,18 @@ const ListOrders = () => {
       toast.error(error?.data?.message);
     }
 
-    // if (deleteError) {
-    //   toast.error(deleteError?.data?.message);
-    // }
+    if (deleteError) {
+      toast.error(deleteError?.data?.message);
+    }
 
-    // if (isSuccess) {
-    //   toast.success("Product deleted successfully");
-    // }
-  }, [error]);
+    if (isSuccess) {
+      toast.success("Order deleted successfully");
+    }
+  }, [error, deleteError, isSuccess]);
 
-//   const deleteProductHandler = (id) => {
-//     deleteProduct({ id });
-//   };
+  const deleteOrderHandler = (id) => {
+    deleteOrder(id);
+  };
 
   const setOrders = () => {
     const orders = {
@@ -55,8 +57,8 @@ const ListOrders = () => {
             </Link>
             <button
               className="btn btn-outline-danger ms-2"
-            //   onClick={() => deleteProductHandler(product?._id)}
-            //   disabled={isDeleteLoading}
+              onClick={() => deleteOrderHandler(order?._id)}
+              disabled={isDeleteLoading}
             >
               <i className="fa fa-trash"></i>
             </button>
