@@ -4,19 +4,27 @@ import MetaData from "../layouts/MetaData";
 import toast from "react-hot-toast";
 import { MDBDataTable } from "mdbreact";
 import Loader from "../layouts/Loader";
-import { useLazyGetProductReviewQuery } from "../../redux/api/productsApi";
+import { useDeleteProductReviewMutation, useLazyGetProductReviewQuery } from "../../redux/api/productsApi";
 
 const ProductReviews = () => {
   const [productId, setProductId] = useState("");
 
-  const [getProductReview, { data, isLoading, error, isSuccess }] =
+  const [getProductReview, { data, isLoading, error }] =
     useLazyGetProductReviewQuery();
+
+  const [deleteProductReview , { error: deleteError, isLoading: isDeleteLoading, isSuccess}]   =useDeleteProductReviewMutation()
 
   useEffect(() => {
     if (error) {
       toast.error(error?.data?.message);
     }
-  }, [error]);
+    if (deleteError) {
+      toast.error(deleteError?.data?.message);
+    }
+    if (isSuccess) {
+      toast.success("Review deleted!");
+    }
+  }, [error, isSuccess, deleteError]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -26,6 +34,10 @@ const ProductReviews = () => {
       toast.error("Please enter a valid Product ID");
     }
   };
+
+  const deleteReviewHandler = (id) => {
+    deleteProductReview({productId, id})
+  }
 
   const setReviews = () => {
     const reviews = {
@@ -49,8 +61,8 @@ const ProductReviews = () => {
           <>
             <button
               className="btn btn-outline-danger ms-2"
-              //   onClick={() => deleteUserHandler(review?._id)}
-              //   disabled={isDeleteLoading}
+                onClick={() => deleteReviewHandler(review?._id)}
+                disabled={isDeleteLoading}
             >
               <i className="fa fa-trash"></i>
             </button>
